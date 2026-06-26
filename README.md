@@ -24,16 +24,16 @@ sudo apt install ffmpeg
 
 ```bash
 # Download everything in a link file as MP3
-edm -i links.txt
+ytdld -i links.txt
 
 # Video mode, 6 parallel threads
-edm -i links.txt --mode mp4 --threads 6
+ytdld -i links.txt --mode mp4 --threads 6
 
 # Interactive picker — deselect tracks before downloading
-edm -i links.txt --select
+ytdld -i links.txt --select
 
 # Custom output directory
-edm -i links.txt --out ~/Downloads/Music
+ytdld -i links.txt --out ~/Downloads/Music
 ```
 
 ### Options
@@ -48,7 +48,7 @@ edm -i links.txt --out ~/Downloads/Music
 
 ### Link file format
 
-The input file can be messy — raw text, Google search result URLs, YouTube playlist URLs, video URLs. `edm` extracts and deduplicates all valid YouTube IDs automatically.
+The input file can be messy — raw text, Google search result URLs, YouTube playlist URLs, video URLs. `ytdld` extracts and deduplicates all valid YouTube IDs automatically.
 
 ```text
 https://www.youtube.com/watch?v=dQw4w9WgXcQ

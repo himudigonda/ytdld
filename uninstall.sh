@@ -7,4 +7,4 @@ if ! command -v uv >/dev/null 2>&1; then
 fi
 
 uv tool uninstall ytdld
-echo "edm uninstalled."
+echo "ytdld uninstalled."

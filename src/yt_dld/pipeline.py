@@ -136,7 +136,6 @@ class Config:
     root_dir: Path
     mode: str
     workers: int
-    input_file: Path = None
 
 
 class Dashboard:
@@ -275,13 +274,13 @@ def download_task(entry, config, dash):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="edm — parallel YouTube → MP3/MP4 downloader",
+        description="ytdld — parallel YouTube → MP3/MP4 downloader",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 examples:
-  edm -i links.txt
-  edm -i links.txt --mode mp4 --threads 6
-  edm -i links.txt --select            # interactive picker before downloading
+  ytdld -i links.txt
+  ytdld -i links.txt --mode mp4 --threads 6
+  ytdld -i links.txt --select          # interactive picker before downloading
         """,
     )
     parser.add_argument("--input", "-i", required=True, help="text file of URLs")
