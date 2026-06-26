@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REPO="himudigonda/edm-pipeline"
+REPO="himudigonda/ytdld"
 INSTALL_DIR="${INSTALL_DIR:-$HOME/.local/bin}"
 
 fail() {
@@ -51,7 +51,7 @@ main() {
   check_ffmpeg
 
   echo "Installing edm from github.com/${REPO}..."
-  uv tool install "edm-pipeline @ git+https://github.com/${REPO}"
+  uv tool install "ytdld @ git+https://github.com/${REPO}"
 
   # uv tool installs the shim into ~/.local/bin by default
   EDM_PATH="$(uv tool dir)/../bin/edm"

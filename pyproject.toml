@@ -1,5 +1,5 @@
 [project]
-name = "edm-pipeline"
+name = "ytdld"
 version = "2.0.0"
 description = "Parallel YouTube → MP3/MP4 downloader with a real-time TUI"
 readme = "README.md"

@@ -1,4 +1,4 @@
-# edm-pipeline
+# ytdld
 
 Parallel YouTube → MP3/MP4 downloader with a real-time TUI dashboard.
 
@@ -7,7 +7,7 @@ Paste a file of links (individual videos, playlists, Google search results — a
 ## Install
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/himudigonda/edm-pipeline/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/himudigonda/ytdld/main/install.sh | bash
 ```
 
 Requires **ffmpeg** on your PATH for MP3 conversion and thumbnail embedding.
@@ -63,7 +63,7 @@ Files are saved as `<out>/<uploader>/<title>.mp3` (or `.mp4`). MP3 downloads inc
 ## Uninstall
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/himudigonda/edm-pipeline/main/uninstall.sh | bash
+curl -fsSL https://raw.githubusercontent.com/himudigonda/ytdld/main/uninstall.sh | bash
 ```
 
 ## How it works

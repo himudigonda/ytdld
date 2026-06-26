@@ -26,7 +26,7 @@ try:
     from rich.table import Table
     from rich.text import Text
 except ImportError:
-    print("rich missing — run: uv tool install edm-pipeline")
+    print("rich missing — run: uv tool install ytdld")
     raise SystemExit(1)
 
 import yt_dlp
@@ -110,7 +110,7 @@ def interactive_select(entries: List[Dict]) -> List[Dict]:
     try:
         import questionary
     except ImportError:
-        print("--select needs questionary. Run: uv tool install edm-pipeline")
+        print("--select needs questionary. Run: uv tool install ytdld")
         raise SystemExit(1)
 
     if not entries:
@@ -286,14 +286,24 @@ examples:
     )
     parser.add_argument("--input", "-i", required=True, help="text file of URLs")
     parser.add_argument(
-        "--out", "-o", default="~/Music/Downloads", help="output directory (default: ~/Music/Downloads)"
+        "--out",
+        "-o",
+        default="~/Music/Downloads",
+        help="output directory (default: ~/Music/Downloads)",
     )
     parser.add_argument(
-        "--mode", choices=["mp3", "mp4"], default="mp3", help="output format (default: mp3)"
+        "--mode",
+        choices=["mp3", "mp4"],
+        default="mp3",
+        help="output format (default: mp3)",
     )
-    parser.add_argument("--threads", type=int, default=3, help="parallel workers (default: 3)")
     parser.add_argument(
-        "--select", action="store_true", help="interactive checkbox picker before downloading"
+        "--threads", type=int, default=3, help="parallel workers (default: 3)"
+    )
+    parser.add_argument(
+        "--select",
+        action="store_true",
+        help="interactive checkbox picker before downloading",
     )
     args = parser.parse_args()
 
@@ -327,10 +337,10 @@ examples:
 
     with Live(dash.update_layout(), refresh_per_second=4, screen=True) as live:
         dash.log(f"Loaded {len(entries)} tracks from {input_path.name}")
-        with concurrent.futures.ThreadPoolExecutor(max_workers=config.workers) as executor:
-            futures = [
-                executor.submit(download_task, e, config, dash) for e in entries
-            ]
+        with concurrent.futures.ThreadPoolExecutor(
+            max_workers=config.workers
+        ) as executor:
+            futures = [executor.submit(download_task, e, config, dash) for e in entries]
             while any(f.running() for f in futures):
                 live.update(dash.update_layout())
                 time.sleep(0.2)

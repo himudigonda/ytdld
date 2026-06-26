@@ -2,9 +2,9 @@
 set -euo pipefail
 
 if ! command -v uv >/dev/null 2>&1; then
-  echo "uv not found — edm-pipeline was not installed via uv tool"
+  echo "uv not found — ytdld was not installed via uv tool"
   exit 1
 fi
 
-uv tool uninstall edm-pipeline
+uv tool uninstall ytdld
 echo "edm uninstalled."
