@@ -1,8 +1,18 @@
 # ytdld
 
-Parallel YouTube → MP3/MP4 downloader with a real-time TUI dashboard.
+Not just a `yt-dlp` wrapper. A mission control dashboard for downloading music.
 
-Paste a file of links (individual videos, playlists, Google search results — any format), pick what you want, and walk away. Threads handle the rest.
+Dump your links, hit enter, and watch your terminal turn into a live operations center — every thread tracked, every byte counted, every completion logged in real time.
+
+---
+
+## What it looks like
+
+![ytdld TUI dashboard](assets/demo.png)
+
+The dashboard takes over your full terminal (alternate buffer — no scroll artifacts when it exits). Each thread gets its own live row. When a download finishes, it flips to a post-processing indicator while ffmpeg converts to MP3 and embeds the cover art. Then it's done and the next one starts.
+
+---
 
 ## Install
 
@@ -10,71 +20,110 @@ Paste a file of links (individual videos, playlists, Google search results — a
 curl -fsSL https://raw.githubusercontent.com/himudigonda/ytdld/main/install.sh | bash
 ```
 
-Requires **ffmpeg** on your PATH for MP3 conversion and thumbnail embedding.
+That's it. The script installs `uv` if you don't have it, then registers `ytdld` as a system binary. No virtualenv to activate, no `python -m` prefix, no PATH nonsense.
+
+**Also needs ffmpeg** (for MP3 conversion + cover art embedding):
 
 ```bash
-# macOS
-brew install ffmpeg
-
-# Ubuntu / Debian
-sudo apt install ffmpeg
+brew install ffmpeg        # macOS
+sudo apt install ffmpeg    # Ubuntu/Debian
 ```
+
+---
+
+## Workflow
+
+### Step 1 — collect your links into a text file
+
+Paste anything. YouTube URLs, playlist links, Google search result URLs, raw text with links buried in it — `ytdld` pulls out every valid YouTube ID automatically and deduplicates.
+
+```text
+# links.txt — paste whatever, one per line or all mixed together
+https://www.youtube.com/watch?v=dQw4w9WgXcQ
+https://www.youtube.com/playlist?list=PLrEnWoR732-BHrPp_Pm8_VleD68f9s14-
+https://www.google.com/search?q=hardwell+spaceman&v%3DdQw4w9WgXcQ...
+```
+
+### Step 2 (optional) — pick exactly what you want
+
+```bash
+ytdld -i links.txt --select
+```
+
+Before downloading anything, you get an interactive checkbox list — every track shown with its duration and uploader, all pre-checked. Untick what you don't want, hit enter.
+
+```
+Select tracks (42 found, space to toggle, enter to confirm):
+❯ ◉   3:54  Tsunami (Original Mix)  — DVBBS
+  ◉   5:12  Animals  — Martin Garrix
+  ◉   4:01  Spaceman  — Hardwell
+  ◯   1:23  some annoying intro  — RandomChannel
+  ◉   6:44  Internet Friends  — Knife Party
+```
+
+### Step 3 — run it and watch
+
+```bash
+ytdld -i links.txt
+```
+
+The TUI takes over. Come back when it's done.
+
+---
 
 ## Usage
 
 ```bash
-# Download everything in a link file as MP3
-ytdld -i links.txt
-
-# Video mode, 6 parallel threads
-ytdld -i links.txt --mode mp4 --threads 6
-
-# Interactive picker — deselect tracks before downloading
-ytdld -i links.txt --select
-
-# Custom output directory
-ytdld -i links.txt --out ~/Downloads/Music
+ytdld -i links.txt                          # MP3, 3 threads, ~/Music/Downloads
+ytdld -i links.txt --threads 6              # faster, more concurrent downloads
+ytdld -i links.txt --mode mp4               # video instead of audio
+ytdld -i links.txt --select                 # interactive picker first
+ytdld -i links.txt --out ~/Desktop/Music    # custom output directory
 ```
-
-### Options
 
 | Flag | Default | Description |
 |---|---|---|
-| `-i`, `--input` | required | path to a text file of URLs |
-| `-o`, `--out` | `~/Music/Downloads` | output directory |
-| `--mode` | `mp3` | `mp3` or `mp4` |
+| `-i`, `--input` | required | text file of URLs (messy is fine) |
 | `--threads` | `3` | parallel download workers |
-| `--select` | off | interactive checkbox picker |
+| `--mode` | `mp3` | `mp3` or `mp4` |
+| `--out` | `~/Music/Downloads` | output directory |
+| `--select` | off | interactive picker before downloading |
 
-### Link file format
+---
 
-The input file can be messy — raw text, Google search result URLs, YouTube playlist URLs, video URLs. `ytdld` extracts and deduplicates all valid YouTube IDs automatically.
+## The TUI in detail
 
-```text
-https://www.youtube.com/watch?v=dQw4w9WgXcQ
-https://www.youtube.com/playlist?list=PLrEnWoR732-BHrPp_Pm8_VleD68f9s14-
-https://www.google.com/search?q=...&v%3DdQw4w9WgXcQ...
+**Header** — one global progress bar across the full width. Shows a spinner, overall % complete, and time remaining for the whole batch.
+
+**Worker Threads** — one live row per active download. Each row shows the track title, a download progress bar, bytes downloaded so far, and current transfer speed. When a download finishes and ffmpeg kicks in, the row switches to a post-processing indicator (`⚙`) until the MP3 is written.
+
+**Telemetry** — running counters: how many completed successfully, how many errored, how many are actively downloading right now.
+
+**Events** — a live log of the last 8 completions (green) or errors (red). Lets you see what finished while you weren't watching.
+
+When the batch completes, the TUI exits cleanly and returns your terminal exactly as it was.
+
+---
+
+## Output
+
+Files land at `<out>/<uploader>/<title>.mp3` (or `.mp4`). MP3 files include embedded cover art (the YouTube thumbnail) and full ID3 metadata. Organized by uploader automatically — no manual sorting.
+
+```
+~/Music/Downloads/
+  Martin Garrix/
+    Animals.mp3
+    Forbidden Voices.mp3
+  Hardwell/
+    Spaceman.mp3
+  DVBBS/
+    Tsunami (Original Mix).mp3
 ```
 
-## Output structure
-
-Files are saved as `<out>/<uploader>/<title>.mp3` (or `.mp4`). MP3 downloads include embedded cover art and ID3 metadata from YouTube.
+---
 
 ## Uninstall
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/himudigonda/ytdld/main/uninstall.sh | bash
 ```
-
-## How it works
-
-- **URL sanitizer** — regex-extracts clean YouTube video/playlist IDs from any input format, including Google-wrapped URLs
-- **Playlist expander** — resolves playlist IDs into individual video entries via `yt-dlp` flat extraction
-- **Parallel engine** — `ThreadPoolExecutor` with configurable worker count; each thread has its own progress bar in the TUI
-- **Rich TUI** — fullscreen live dashboard: global progress, per-thread download speed, event log, telemetry
-
-## Requirements
-
-- Python 3.11+
-- ffmpeg (system dependency)
-- macOS or Linux
