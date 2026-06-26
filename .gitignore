@@ -8,3 +8,9 @@ wheels/
 
 # Virtual environments
 .venv
+
+# personal link files — not for public repo
+links.txt
+test_links.txt
+.DS_Store
+.claude/
