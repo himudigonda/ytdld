@@ -1,20 +1,40 @@
 [project]
 name = "ytdld"
-version = "2.0.0"
-description = "Parallel YouTube → MP3/MP4 downloader with a real-time TUI"
+version = "3.0.0"
+description = "Interactive YouTube → MP3/MP4/FLAC downloader with a Textual TUI"
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
-keywords = ["youtube", "downloader", "yt-dlp", "music", "tui"]
+keywords = ["youtube", "downloader", "yt-dlp", "music", "tui", "textual"]
+authors = [{ name = "Himansh Mudigonda" }]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Multimedia :: Sound/Audio",
+    "Topic :: Multimedia :: Video",
+]
 
 dependencies = [
     "questionary>=2.1.1",
     "rich>=14.2.0",
+    "textual>=0.60",
     "yt-dlp>=2025.12.8",
 ]
 
+[project.urls]
+Homepage = "https://github.com/himudigonda/ytdld"
+Repository = "https://github.com/himudigonda/ytdld"
+Issues = "https://github.com/himudigonda/ytdld/issues"
+
 [project.scripts]
-ytdld = "yt_dld.pipeline:main"
+ytdld = "yt_dld.cli:main"
 
 [build-system]
 requires = ["hatchling"]
@@ -23,7 +43,24 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["src/yt_dld"]
 
+[tool.hatch.build.targets.sdist]
+include = [
+    "src/yt_dld",
+    "tests",
+    "README.md",
+    "LICENSE",
+    "install.sh",
+    "uninstall.sh",
+    "pyproject.toml",
+]
+
 [dependency-groups]
 dev = [
     "hatchling>=1.30.1",
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
 ]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

@@ -58,7 +58,10 @@ main() {
     echo "  export PATH=\"${INSTALL_DIR}:\$PATH\""
   fi
   echo ""
-  echo "Run: ytdld --help"
+  echo "Get started:"
+  echo "  ytdld            # launch the interactive TUI"
+  echo "  ytdld doctor     # check your environment"
+  echo "  ytdld --help     # all commands"
 }
 
 main "$@"

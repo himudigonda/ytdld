@@ -8,6 +8,11 @@ wheels/
 
 # Virtual environments
 .venv
+.venv*/
+
+# tooling caches
+.pytest_cache/
+.ruff_cache/
 
 # personal link files — not for public repo
 links.txt
