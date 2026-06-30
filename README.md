@@ -118,51 +118,37 @@ ytdld
 
 ### 1 · Compose screen
 
-Paste links on the left; every option is a live control on the right.
+Paste links in the editor; every setting is a live control on the right pane. Your choices are saved the moment you hit Download.
 
-```
-┌─ ytdld v3.0.0 ────────────────────────────────────────────────────────────┐
-│ Paste YouTube links (any format)            │  Output folder                │
-│ ┌─────────────────────────────────────────┐ │  ~/Music/Downloads            │
-│ │ https://youtu.be/dQw4w9WgXcQ            │ │  Format     [ MP3  (audio) ▾] │
-│ │ https://youtube.com/playlist?list=PL... │ │  Quality    [ best         ▾] │
-│ │ https://youtube.com/shorts/abcdefghijk  │ │  Threads    [ 3            ▾] │
-│ │                                         │ │  SponsorBlk [ skip segments▾] │
-│ └─────────────────────────────────────────┘ │  Cookies    [ none         ▾] │
-│ [path/to/links.txt] [Load file][Paste][Clear]│  ◉ Skip already-downloaded    │
-│                                              │  ◉ Embed thumbnail / cover    │
-│                                              │  ◉ Embed metadata             │
-│                                              │  ◉ Notify when finished       │
-├──────────────────────────────────────────────────────────────────────────┤
-│            [ ⬇ Download all ]   [ ☑ Resolve & pick ]   [ Quit ]             │
-└──────────────────────────────────────────────────────────────────────────┘
-```
+![ytdld compose screen](assets/screenshot_compose.png)
 
 - **Load file** — type a path and pull a links file into the editor.
 - **Paste clipboard** — append whatever's on your clipboard.
-- **⬇ Download all** (`Ctrl+D`) — resolve playlists and start immediately.
-- **☑ Resolve & pick** (`Ctrl+R`) — open the selection screen first.
+- **Download all** (`Ctrl+D`) — resolve playlists and start immediately.
+- **Resolve & pick** (`Ctrl+R`) — open the selection screen first.
 
-The **Quality** control is enabled only for MP4. Your settings are saved as defaults the moment you start a download.
+The **Quality** control is enabled only for MP4.
 
 ### 2 · Select screen (optional)
 
-A checkbox list of every resolved track — all pre-checked. `Space` toggles, `a` selects all, `n` selects none, `Ctrl+D` downloads the checked ones. Perfect for pasting a 200-track playlist and grabbing only what you want.
+A checkbox list of every resolved track — all pre-checked. `Space` toggles, `a` selects all, `n` selects none, `Ctrl+D` downloads the checked ones. Perfect for pasting a 200-track playlist and grabbing only a few.
 
 ### 3 · Progress screen
 
 A live dashboard while downloading:
 
-- a **total** progress bar with ETA,
-- a **per-track table** (status · title · progress bar · speed) that updates in real time,
-- a **stats line** (✓ done · ✗ errors · ⇣ active),
-- a scrolling **event log**.
+![ytdld downloading](assets/screenshot_downloading.png)
 
-When it finishes: press `q` to quit, `o` to open the output folder, or `r` to **retry just the failed tracks**. Quitting mid-download cleanly aborts in-flight transfers. Network hiccups are retried automatically (yt-dlp retries built in).
+- A **total** progress bar with ETA at the top
+- A **per-track table** (status · title · progress · speed) updating in real time
+- A **stats line** (✓ done · ✗ errors · ↓ active · / total)
+- A scrolling **event log** at the bottom
 
-> The screenshot below shows the live download dashboard.
->
-> ![ytdld download dashboard](assets/demo.png)
+When it finishes:
+
+![ytdld done](assets/screenshot_done.png)
+
+Press `q` to quit, `o` to open the output folder, or `r` to **retry just the failed tracks**. Quitting mid-download cleanly aborts in-flight transfers. Network hiccups are retried automatically.
 
 ---
 
